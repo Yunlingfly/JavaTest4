@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 拦截器 在withAop()方法前运行 安装到NameMatchMethodPointcutAdvice中 -->
+    <bean id="aopMethodBefore" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+        <property name="advice">
+            <bean class="com.hand.api.before.IAopMethodBefore"/>
+        </property>
+        <property name="mappedName" value="insertOne"/>
+    </bean>
+
+    <!-- 拦截器 在withAop()方法后运行 安装到NameMatchMethodPointcutAdvice中 -->
+    <bean id="aopMethodAfter" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+        <property name="advice">
+            <bean class="com.hand.api.after.IAopMethodAfter"/>
+        </property>
+        <property name="mappedName" value="insertOne"/>
+    </bean>
+
+    <!-- 拦截器 在异常抛出后运行 安装到NameMatchMethodPointcutAdvice中 -->
+    <bean id="aopException" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+        <property name="advice">
+            <bean class="com.hand.api.exception.ThrowsInterceptor"/>
+        </property>
+        <property name="mappedName" value="insertOne"/>
+    </bean>
+
+    <!-- Service对象 安装到ProxyFactoryBean对象中 -->
+    <bean id="filmService" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <!-- 多个拦截器 -->
+        <property name="interceptorNames">
+            <list>
+                <value>aopMethodBefore</value>
+                <value>aopMethodAfter</value>
+                <value>aopException</value>
+            </list>
+        </property>
+        <!-- 被拦截的对象 -->
+        <property name="target">
+            <bean class="com.hand.api.service.impl.FilmService">
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="filmController" class="com.hand.api.controller.FilmController">
+        <property name="iFilmService" ref="filmService"/>
+    </bean>
+</beans>
