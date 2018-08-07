@@ -49,7 +49,7 @@
     <tx:advice id="iccardTxAdvice" transaction-manager="jdbcdataSourceTransactionManager">
         <tx:attributes>
             <tx:method name="delete*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" no-rollback-for="java.lang.RuntimeException"/>
-            <tx:method name="insert*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.RuntimeException" />
+            <tx:method name="insert*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
             <tx:method name="add*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.RuntimeException" />
             <tx:method name="create*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.RuntimeException" />
             <tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />

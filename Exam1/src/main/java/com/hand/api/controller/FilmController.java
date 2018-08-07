@@ -33,7 +33,6 @@ public class FilmController {
 
     public void insertOneWithException(Film film) throws Exception{
         iFilmService.insertOne(film);
-        throw new RuntimeException("sometest");
     }
 
     public IFilmService getiFilmService() {
